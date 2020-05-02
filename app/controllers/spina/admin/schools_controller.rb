@@ -45,7 +45,7 @@ module Spina
       end
 
       def school_params
-        params.require(:school).permit(:title)
+        params.require(:school).permit(:title, :county, :min_age, :max_age)
       end
 
       def set_breadcrumb

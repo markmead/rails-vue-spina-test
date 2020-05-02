@@ -8,7 +8,10 @@
     "@tailwindcss/ui": "^0.3.0",
     "tailwindcss": "^1.4.4",
     "turbolinks": "^5.2.0",
-    "typeface-roboto": "^0.0.75"
+    "typeface-roboto": "^0.0.75",
+    "vue": "^2.6.11",
+    "vue-loader": "^15.9.2",
+    "vue-template-compiler": "^2.6.11"
   },
   "version": "0.1.0",
   "devDependencies": {

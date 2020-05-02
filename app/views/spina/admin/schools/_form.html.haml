@@ -32,6 +32,21 @@
           = f.label :title
         .horizontal-form-content
           = f.text_field :title
+      .horizontal-form-group
+        .horizontal-form-label
+          = f.label :county
+        .horizontal-form-content
+          = f.text_field :county
+      .horizontal-form-group
+        .horizontal-form-label
+          = f.label :min_age
+        .horizontal-form-content
+          = f.text_field :min_age
+      .horizontal-form-group
+        .horizontal-form-label
+          = f.label :max_age
+        .horizontal-form-content
+          = f.text_field :max_age
 
   - unless @school.new_record?
     .pull-right= link_to t('spina.permanently_delete'), spina.admin_school_path(@school), method: :delete, data: {confirm: t('spina.pages.delete_confirmation', subject: @school.title) }, class: 'button button-link button-danger'

@@ -184,6 +184,9 @@ ActiveRecord::Schema.define(version: 2020_05_02_115325) do
 
   create_table "spina_schools", force: :cascade do |t|
     t.string "title"
+    t.string "county"
+    t.integer "min_age"
+    t.integer "max_age"
   end
 
   create_table "spina_settings", id: :serial, force: :cascade do |t|

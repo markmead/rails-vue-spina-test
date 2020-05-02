@@ -4,7 +4,7 @@ module Spina
     layout 'layouts/default/application'
 
     def index
-      @schools = render json: Spina::School.all
+      @schools = Spina::School.all
     end
   end
 end
