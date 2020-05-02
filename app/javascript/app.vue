@@ -1,116 +1,90 @@
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-8">
-    <div class="grid grid-cols-5 gap-12">
-      <div class="col-span-1">
-        <p>Min Age: {{ min_age }}</p>
-        <p>Max Age: {{ max_age }}</p>
-        <p>County: {{ county }}</p>
-        <div class="mt-5 space-y-4">
-          <label
-            for="london"
-            class="flex flex-col px-3 py-2 bg-gray-50 rounded-md border"
-          >
-            London
-            <input
-              type="checkbox"
-              value="London"
-              id="london"
-              class="mt-1 w-5 h-5 form-checkbox"
-              v-model="county"
-            >
-          </label>
-          <label
-            for="essex"
-            class="flex flex-col px-3 py-2 bg-gray-50 rounded-md border"
-          >
-            Essex
-            <input
-              type="checkbox"
-              value="Essex"
-              id="essex"
-              class="mt-1 w-5 h-5 form-checkbox"
-              v-model="county"
-            >
-          </label>
-          <label
-            for="min_age"
-            class="flex flex-col px-3 py-2 bg-gray-50 rounded-md border"
-          >
-            Min Age
-            <input
-              type="range"
-              id="min_age"
-              class="mt-1"
-              :min="this.min_age_static"
-              :max="this.max_age_static"
-              v-model="min_age"
-            >
-          </label>
-          <label
-            for="max_age"
-            class="flex flex-col px-3 py-2 bg-gray-50 rounded-md border"
-          >
-            Max Age
-            <input
-              type="range"
-              id="max_age"
-              class="mt-1"
-              :min="this.min_age_static"
-              :max="this.max_age_static"
-              v-model="max_age"
-            >
-          </label>
+  <div class="flex h-screen overflow-hidden bg-gray-100">
+
+    <app-sidebar>
+      <fieldset>
+        <legend class="block text-base font-medium leading-5 text-gray-700">Location</legend>
+        <div class="flex flex-col mt-4 space-y-2">
+          <app-filter-checkbox
+            label="Essex"
+            v-model="filters.county"
+            @updateCountyFilter="updateCountyFilter"
+          ></app-filter-checkbox>
+          <app-filter-checkbox
+            label="London"
+            v-model="filters.county"
+            @updateCountyFilter="updateCountyFilter"
+          ></app-filter-checkbox>
         </div>
+      </fieldset>
+
+      <div class="p-4 -mx-4 -mb-4 text-sm text-gray-500 border-t border-gray-200 bg-gray-50">
+        {{ this.filters.county }}
       </div>
 
-      <div class="col-span-4">
-        <div
-          v-if="this.filteredSchools.length !== 0"
-          class="grid grid-cols-3 gap-8"
-        >
-          <app-school
+    </app-sidebar>
+    <app-wrapper>
+      <div class="overflow-hidden bg-white shadow sm:rounded-md">
+        <ul class="divide-y divide-gray-200">
+          <app-school-link
             v-for="school of this.filteredSchools"
             :key="school.id"
             :school="school"
-          ></app-school>
-        </div>
-        <div v-else>
-          <p>Sorry, we found no results</p>
-        </div>
+          ></app-school-link>
+        </ul>
       </div>
-    </div>
+    </app-wrapper>
+
   </div>
 </template>
 
 <script>
-import School from './school'
+import Sidebar from './schools/sidebar'
+import Wrapper from './schools/wrapper'
+import SchoolLink from './schools/school_link'
+import FilterCheckbox from './schools/filter_checkbox'
 
 export default {
   name: 'App',
   data() {
     return {
       schools: '',
-      county: [],
-      min_age: null,
-      max_age: null,
       min_age_static: null,
-      max_age_static: null
+      max_age_static: null,
+      filters: {
+        county: [],
+        min_age: null,
+        max_age: null
+      }
     }
   },
   props: ['schools_json'],
   components: {
-    'app-school': School
+    'app-school-link': SchoolLink,
+    'app-sidebar': Sidebar,
+    'app-wrapper': Wrapper,
+    'app-filter-checkbox': FilterCheckbox
+  },
+  methods: {
+    updateCountyFilter(value) {
+      const county = this.filters.county
+
+      county.includes(value) ? county.splice(value, 1) : county.push(value)
+    }
   },
   computed: {
     filteredSchools() {
+      // const filters = this.filters
       let schools = this.schools
 
-      if (this.county.length !== 0) {
-        schools = schools.filter(school => this.county.includes(school.county))
+      if (this.filters.county.length !== 0) {
+        schools = schools.filter(school =>
+          this.filters.county.includes(school.county)
+        )
       }
 
-      schools = schools.filter(school => school.min_age >= this.min_age)
-      schools = schools.filter(school => school.max_age <= this.max_age)
+      // schools = schools.filter(school => school.min_age >= this.min_age)
+      // schools = schools.filter(school => school.max_age <= this.max_age)
 
       return schools
     }
